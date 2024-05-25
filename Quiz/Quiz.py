@@ -1,33 +1,51 @@
+import mysql.connector as s
+def login_sql():
+    mycon=s.connect(host="localhost",user='root',passwd="272",database='quiz')
+    
 class Quiz:
-    def __init__(self):
-        self.questions = []
-        self.score = 0
-        
-    def add_question(self, question, answer):
-        self.questions.append({"question": question, "answer": answer})
-
-    def take_quiz(self):
-        for q in self.questions:
-            print(q["question"])
-            user_answer = input("Your answer: ")
-            if user_answer.lower() == q["answer"].lower():
-                print("Correct!")
-                self.score += 1
+    def __init__ (self):
+        self.admin_u="1"
+        self.admin_p="2"
+        self.categories = [] ; list
+         
+    def login(self):
+        access = False
+        user=input("Do you want to login as a admin or player: ")
+        while True:
+            if user == 'asd':
+                ad_user=input("Enter your admin username: ")
+                ad_pass=input("Enter your admin pass: ")
+            if ad_user==self.admin_u and ad_pass==self.admin_p:
+                print("Welcome adm07!")
+                break
             else:
-                print("Incorrect! The correct answer was:", q["answer"])
-        print(f"Your final score is {self.score}/{len(self.questions)}")
+                print("Wrong user or password try again")
 
-def create_quiz():
+
+    def category(self):
+        cat=int(input("Enter the no of categories: "))
+        for i in range(cat):
+            n = input(f'Enter name of the category {i+1}:  ')
+            q = []
+            a = []
+            qa = (n,q,a)
+            self.categories.append(qa)  
+        pass
+    def add_question(self):
+        for i in self.categories:
+            n = int(input(f'Enter no. of qs for {i[0]}: '))
+            for j in range(n):
+                i[1].append(input('Enter q: '))
+                i[2].append(input("Enter a: "))
+
+    def start(self):
+        pass
+        
+        
+if __name__  == '__main__':
     quiz = Quiz()
-    
-    # Add your questions here
-    n= int(input('Enter no. of questions: '))
-    for i in range(n):
-        quiz.add_question(input('Enter your question: '), input('Enter your anwser: '))
-
-    
-    return quiz
-
-if __name__ == "__main__":
-    quiz = create_quiz()
-    quiz.take_quiz()
+    quiz.login()
+    quiz.category()
+    quiz.add_question()
+    print(quiz.categories)
+    pass
