@@ -1,21 +1,18 @@
-import mysql.connector
+import mysql.connector as s
 from mysql.connector import errorcode
+import tkinter as tk
+from tkinter import messagebox, simpledialog
 
-# Define connection parameters
-config = {
-    'user': 'root',
-    'password': '2721',
-    'host': 'localhost',
-    'raise_on_warnings': True
-}
-
-# Database name you want to check and possibly create
 database_name = 'quiz'
-conn = mysql.connector.connect(**config)
-cursor = conn.cursor()
-try:
-    # Establish connection to the MySQL server
-    
+
+conn = s.connect(host="localhost", user='root', passwd="2721")
+b = True
+if b:
+    c = conn.cursor()
+    c.execute('drop database quiz')
+
+
+def create_sql_db():
     cursor = conn.cursor()
 
     # Check if database exists
@@ -29,14 +26,170 @@ try:
         cursor.execute(f"CREATE DATABASE {database_name}")
         print(f"Database '{database_name}' created successfully.")
 
-except mysql.connector.Error as err:
-    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Something is wrong with your user name or password")
-    elif err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exist")
-    else:
-        print(err)
-finally:
-    # Close cursor and connection
-    cursor.close()
-    conn.close()
+
+class Quiz:
+
+    def __init__(self):
+        self.admin_u = "1"
+        self.admin_p = "2"
+        self.user_u = '3'
+        self.user_p = None
+        self.categories = []
+
+    def category(self):
+        cat = int(input("Enter the number of categories: "))
+        for i in range(cat):
+            n = input(f'Enter the name of the category {i + 1}: ')
+            q = []
+            a = []
+            qa = (n, q, a)
+            self.categories.append(qa)
+        pass
+
+    def create_tables(self):
+        conn = s.connect(host="localhost", user='root', passwd="2721", database=database_name)
+        
+        for i in self.categories:
+            create_table_query = f"""CREATE TABLE {i[0]} (q VARCHAR(1000), a VARCHAR(1000))"""
+            cursor = conn.cursor()
+
+            # Check if the table exists
+            cursor.execute(f"SHOW TABLES LIKE '{i[0]}'")
+            result = cursor.fetchone()
+
+            if result:
+                print(f"Table '{i[0]}' already exists.")
+            else:
+                # Create the table
+                cursor.execute(create_table_query)
+                print(f"Table '{i[0]}' created successfully.")
+
+    def add_qa_sql(self):
+        conn = s.connect(host="localhost", user='root', passwd="2721", database=database_name)
+        c = conn.cursor()
+        for i in self.categories:
+            q = i[1]
+            a = i[2]
+            data = []
+
+            for j in range(len(q)):
+                x = (q[j], a[j])
+                data.append(x)
+
+            query = f"INSERT INTO {i[0]} VALUES (%s, %s)"
+            c.executemany(query, data)
+            conn.commit()
+
+    def add_question(self, category_name, question, answer):
+        for i in self.categories:
+            if i[0] == category_name:
+                i[1].append(question)
+                i[2].append(answer)
+                break
+        else:
+            messagebox.showerror("Error", f"Category '{category_name}' not found.")
+
+
+class QuizGUI:
+    def __init__(self, root, quiz):
+        self.root = root
+        self.quiz = quiz
+
+        self.root.title("Quiz Admin")
+        self.root.geometry("500x400")
+
+        self.create_login_mode_screen()
+    def create_login_mode_screen(self):
+        self.clear_screen()
+        tk.Label(self.root, text="Do you want to login as admin/player: ",font=("Helvetica", 16)).pack(pady=20)
+        tk.Button(self.root, text="Admin",command=self.create_login_screen_admin).pack(pady=5)
+        tk.Button(self.root, text="Player",command=self.create_login_screen_user).pack(pady=10)
+    
+
+    def create_login_screen_admin(self):
+        self.clear_screen()
+
+        tk.Label(self.root, text="Login", font=("Helvetica", 16)).pack(pady=20)
+        
+        tk.Label(self.root, text="Username").pack()
+        self.admin_user_entry = tk.Entry(self.root)
+        self.admin_user_entry.pack()
+
+        tk.Label(self.root, text="Password").pack()
+        self.admin_pass_entry = tk.Entry(self.root, show="*")
+        self.admin_pass_entry.pack()
+
+        tk.Button(self.root, text="Login", command=self.login).pack(pady=20)
+    def create_login_screen_user(self):
+        self.clear_screen()
+
+        tk.Label(self.root, text="Login", font=("Helvetica", 16)).pack(pady=20)
+        
+        tk.Label(self.root, text="Username").pack()
+        self.admin_user_entry = tk.Entry(self.root)
+        self.admin_user_entry.pack()
+
+        tk.Button(self.root, text="Login", command=self.test).pack(pady=20)
+
+    def clear_screen(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+    def test(self):
+        username = self.admin_user_entry.get()
+        if username:
+            messagebox.showinfo("Login Success", "Welcome user!")
+            self.create_main_screen_u()
+            
+    def create_main_screen_u():
+        pass
+
+    def login(self):
+        username = self.admin_user_entry.get()
+        password = self.admin_pass_entry.get()
+
+        if username == self.quiz.admin_u and password == self.quiz.admin_p:
+            messagebox.showinfo("Login Success", "Welcome admin!")
+            self.create_main_screen()
+        else:
+            messagebox.showerror("Login Failed", "Invalid username or password.")
+            
+            
+  
+        
+    def create_main_screen(self):
+        self.clear_screen()
+
+        tk.Label(self.root, text="Admin Panel", font=("Helvetica", 16)).pack(pady=20)
+
+        tk.Button(self.root, text="Add Category", command=self.add_category).pack(pady=5)
+        tk.Button(self.root, text="Add Question", command=self.add_question).pack(pady=5)
+        tk.Button(self.root, text="Create Tables", command=self.quiz.create_tables).pack(pady=5)
+        tk.Button(self.root, text="Save Questions to DB", command=self.quiz.add_qa_sql).pack(pady=5)
+
+    def add_category(self):
+        category_name = simpledialog.askstring("Category", "Enter the name of the category:")
+        if category_name:
+            self.quiz.categories.append((category_name, [], []))
+            messagebox.showinfo("Success", f"Category '{category_name}' added.")
+
+    def add_question(self):
+        if not self.quiz.categories:
+            messagebox.showerror("Error", "No categories found. Please add a category first.")
+            return
+        
+        category_name = simpledialog.askstring("Category", "Enter the name of the category:")
+        if category_name:
+            question = simpledialog.askstring("Question", "Enter the question:")
+            answer = simpledialog.askstring("Answer", "Enter the answer:")
+            if question and answer:
+                self.quiz.add_question(category_name, question, answer)
+                messagebox.showinfo("Success", "Question and answer added.")
+
+if __name__ == "__main__":
+    create_sql_db()
+    quiz = Quiz()
+
+    root = tk.Tk()
+    gui = QuizGUI(root, quiz)
+    root.mainloop()
