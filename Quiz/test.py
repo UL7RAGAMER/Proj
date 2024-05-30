@@ -175,6 +175,7 @@ class QuizGUI:
         for i in c:
             print(i,'asd')
             tk.Label(self.root, text=i,font=("Helvetica",20,"bold"),bg='#803D3B').pack(pady=50)
+
             
         
         
