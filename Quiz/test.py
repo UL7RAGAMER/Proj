@@ -2,7 +2,7 @@ import mysql.connector as s
 from mysql.connector import errorcode
 import tkinter as tk
 from tkinter import messagebox, simpledialog
-
+import asyncio
 database_name = 'quiz'
 
 conn = s.connect(host="localhost", user='root', passwd="2721")
@@ -164,19 +164,25 @@ class QuizGUI:
         for i in c:
             i = i[0]
             # Create buttons with unique identifiers (category) as command arguments
-            button = tk.Button(self.root, text=i, command=lambda category=i: self.cat_display(category), bg='#803D3B', font=("Helvetica", 20, "bold"))
+            button = tk.Button(self.root, text=i, command=lambda category=i: asyncio.run(self.cat_display(category)), bg='#803D3B', font=("Helvetica", 20, "bold"))
             button.place(relx=0.5, rely=0.5, anchor='center', y=a)
             a += 100  # Adjust spacing between buttons
-
-    def cat_display(self, category):
+    async def wait_until(condition):
+        while not condition():
+            await asyncio.sleep(1) 
+            
+    async def cat_display(self, category):
+        def check(ans):
+            return simpledialog.askstring("Category", "Enter the name of the category:") == ans
+        
         cursor.execute(f'select * from {category}')
         c = cursor.fetchall()
         self.clear_screen()
         for i in c:
-            print(i,'asd')
-            tk.Label(self.root, text=i,font=("Helvetica",20,"bold"),bg='#803D3B').pack(pady=50)
-
-            
+            print(i)
+            tk.Label(self.root, text=i[0],font=("Helvetica",20,"bold"),bg='#803D3B').pack(pady=50)
+            real_ans = i[1]
+            await self.wait_until(lambda real_ans: check(real_ans))
         
         
 
