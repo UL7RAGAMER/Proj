@@ -1,7 +1,6 @@
 import mysql.connector as s
 import tkinter as tk
 from tkinter import messagebox, simpledialog
-import subprocess
 Label_color_fg = '#F4EBFB'
 Label_color_bg = '#978bc4'
 Button_color_fg = '#F4EBFB'
@@ -127,7 +126,7 @@ class QuizGUI:
         self.current_category = ''
         self.questions = []
         self.root.title("Quiz Admin")
-        self.root.geometry("1000x1000")
+        self.root.geometry("1000x500")
         self.create_login_mode_screen()
         self.score = 0
         self.username=''
@@ -135,8 +134,8 @@ class QuizGUI:
     def create_login_mode_screen(self):
         self.clear_screen()
         tk.Label(self.root, text="Do you want to login as admin/player:", font=("courier new", 32,'bold'), bg=Label_color_bg, fg=Label_color_fg).pack(pady=20)
-        tk.Button(self.root, text="Admin", command=self.create_login_screen_admin, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16,'bold'),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=5)
-        tk.Button(self.root, text="Player", command=self.create_login_screen_user, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16,'bold'),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=10)
+        tk.Button(self.root, text="Admin", command=self.create_login_screen_admin, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16,'bold'),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=5)
+        tk.Button(self.root, text="Player", command=self.create_login_screen_user, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16,'bold'),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=10)
 
     def create_login_screen_admin(self):
         self.clear_screen()
@@ -147,7 +146,7 @@ class QuizGUI:
         tk.Label(self.root, text="Password", bg=Label_color_bg, fg=Label_color_fg, font=("courier new", 16)).pack()
         self.admin_pass_entry = tk.Entry(self.root, show="*",fg=Entry_color_fg,bg=Entry_color_bg, font=("courier new", 16))
         self.admin_pass_entry.pack(pady=20)
-        tk.Button(self.root, text="Login", command=self.login, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=20)
+        tk.Button(self.root, text="Login", command=self.login, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=20)
 
     def create_login_screen_user(self):
         self.clear_screen()
@@ -155,7 +154,7 @@ class QuizGUI:
         tk.Label(self.root, text="Username", bg=Label_color_bg, font=("courier new", 16), fg=Label_color_fg).pack(pady=10)
         self.user_entry = tk.Entry(self.root,fg=Entry_color_fg,bg=Entry_color_bg, font=("courier new", 16))
         self.user_entry.pack()
-        tk.Button(self.root, text="Login", command=self.user_login,bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=20)
+        tk.Button(self.root, text="Login", command=self.user_login,bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=20)
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
@@ -170,7 +169,7 @@ class QuizGUI:
     def create_main_screen_u(self):
         self.clear_screen()
         tk.Label(self.root, text="ARE YOU SMARTER THAN A 5th GRADER", font=("courier new", 20, "bold"), bg=Label_color_bg, fg=Label_color_fg).pack(pady=50)
-        tk.Button(self.root, text='START QUIZ', font=("courier new", 20, "bold"), command=self.start_quiz, bg=Button_color_bg, fg=Button_color_fg,highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).place(relx=0.5, rely=0.5, anchor='center')
+        tk.Button(self.root, text='START QUIZ', font=("courier new", 20, "bold"), command=self.start_quiz, bg=Button_color_bg, fg=Button_color_fg,activebackground=Button_color_fg,activeforeground=Button_color_bg).place(relx=0.5, rely=0.5, anchor='center')
 
     def start_quiz(self):
         self.clear_screen()
@@ -181,7 +180,7 @@ class QuizGUI:
         a = 0
         for table in tables:
             table_name = table[0]
-            button = tk.Button(self.root, text=table_name, command=lambda category=table_name: self.cat_display(category),bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 20, "bold"),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected)
+            button = tk.Button(self.root, text=table_name, command=lambda category=table_name: self.cat_display(category),bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 20, "bold"),activebackground=Button_color_fg,activeforeground=Button_color_bg)
             button.place(relx=0.5, rely=0.5, anchor='center', y=a)
             a += 100
         cursor.close()
@@ -207,7 +206,7 @@ class QuizGUI:
             tk.Label(self.root, text=q_text, font=("courier new", 20, "bold"), bg=Label_color_bg, fg=Label_color_fg).pack(pady=20)
             self.answer_entry = tk.Entry(self.root,fg=Entry_color_fg,bg=Entry_color_bg, font=("courier new", 20))
             self.answer_entry.pack(pady=10)
-            tk.Button(self.root, text="Submit", command=self.check_answer,bg=Button_color_bg, fg=Button_color_fg,highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=10)
+            tk.Button(self.root,text="Submit", command=self.check_answer,bg=Button_color_bg, fg=Button_color_fg,activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=10)
         else:
             self.clear_screen()
             tk.Label(self.root, text=f"Quiz Completed!, Your Total score was {self.score}", font=("courier new", 20, "bold"), bg=Label_color_bg, fg=Label_color_fg).pack(pady=20)
@@ -241,11 +240,11 @@ class QuizGUI:
     def create_main_screen(self):
         self.clear_screen()
         tk.Label(self.root, text="Admin Panel", font=("courier new", 32), bg=Label_color_bg, fg=Label_color_fg).pack(pady=20)
-        tk.Button(self.root, text="Add Category", command=self.add_category, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=10)
-        tk.Button(self.root, text="Add Question", command=self.add_question, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=10)
-        tk.Button(self.root, text="Create Tables", command=self.quiz.create_tables, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=10)
-        tk.Button(self.root, text="Save Questions to DB", command=self.quiz.add_qa_sql, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=10)
-        tk.Button(self.root, text="Quit", command=self.create_login_mode_screen, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),highlightbackground= Button_color_bg_selected, highlightcolor=Button_color_fg_selected).pack(pady=10)
+        tk.Button(self.root, text="Add Category", command=self.add_category, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=10)
+        tk.Button(self.root, text="Add Question", command=self.add_question, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=10)
+        tk.Button(self.root, text="Create Tables", command=self.quiz.create_tables, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=10)
+        tk.Button(self.root, text="Save Questions to DB", command=self.quiz.add_qa_sql, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=10)
+        tk.Button(self.root, text="Quit", command=self.create_login_mode_screen, bg=Button_color_bg, fg=Button_color_fg, font=("courier new", 16),activebackground=Button_color_fg,activeforeground=Button_color_bg).pack(pady=10)
 
 
     def add_category(self):
