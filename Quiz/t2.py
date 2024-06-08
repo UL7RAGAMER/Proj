@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog
 
 database_name = 'quiz'
-a = None
+a = 'aklsdjakjsdhkjfdhkjsafhkajdshfjaksjdfhsadkjfhkajdhfkjashfkjadhfjka'
 def get_db_connection():
     return s.connect(host="localhost", user='root', passwd="2721", database=database_name)
 
