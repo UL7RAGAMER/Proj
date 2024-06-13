@@ -22,5 +22,5 @@ jobs:
         run: >
           echo "Running application with Gemini API key and Discord Bot
           token..."
-
-          python Dicord boy\main.py
+          cd C:\Users\siddk\source\repos\Quiz\Dicord boy
+          python main.py
