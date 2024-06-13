@@ -4,3 +4,4 @@ discord.py
 gitpython
 google-api-python-client
 openai
+google-generativeai
