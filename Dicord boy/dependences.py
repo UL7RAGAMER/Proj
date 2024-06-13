@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 # Define the file path
-file_path = "C:\\Users\\siddk\\OneDrive\\Desktop\\Dicord boy\\history.py"
+file_path = "C:\\Users\\siddk\\OneDrive\\Desktop\\Dicord boy\\main.py"
 
 # Read the file content
 try:
@@ -42,6 +42,7 @@ try:
     with open('requirements.txt', 'w') as req_file:
         for package in sorted(packages):
             req_file.write(f"{package}\n")
+            print(package)
 except Exception as e:
     print(f"Failed to write requirements.txt: {e}")
     sys.exit(1)
