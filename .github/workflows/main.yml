@@ -29,5 +29,5 @@ jobs:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
         run: |
           echo "Running application with Gemini API key and Discord Bot token..."
-          cd C:\Users\siddk\source\repos\Quiz\Dicord boy  # Replace with your actual path
+          cd 'C:\Users\siddk\source\repos\Quiz\Dicord boy'  # Replace with your actual path
           python main.py
