@@ -1,6 +1,6 @@
-discord
-discord.ext
-git
-google.generativeai
-google.generativeai.types
-history
+requests
+flask
+discord.py
+gitpython
+google-api-python-client
+openai
