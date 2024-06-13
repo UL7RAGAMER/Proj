@@ -1,26 +1,33 @@
 name: Python Application Workflow
-'on':
-  - push
+
+on:
+  push:
+    branches:
+      - main  # Replace with your branch name if different
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # Indicates this job runs on a self-hosted runner
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: '3.x'  # Specify your desired Python version here
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Run application
         env:
-          GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}'
-          DISCORD_BOT_TOKEN: '${{ secrets.DISCORD_BOT_TOKEN }}'
-        run: >
-          echo "Running application with Gemini API key and Discord Bot
-          token..."
-          cd C:\Users\siddk\source\repos\Quiz\Dicord boy
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+        run: |
+          echo "Running application with Gemini API key and Discord Bot token..."
+          cd C:\Users\siddk\source\repos\Quiz\Dicord boy  # Replace with your actual path
           python main.py
