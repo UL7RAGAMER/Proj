@@ -1,6 +1,0 @@
-discord
-discord.ext
-git
-google.generativeai
-google.generativeai.types
-history
